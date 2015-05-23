@@ -124,6 +124,7 @@ func (c *Conn) sendSimpleQueryRaw(sql string, pe ParamsEncoder) error {
 
 	ps, err := c.Prepare("", sql)
 	if err != nil {
+		c.die(err)
 		return err
 	}
 
@@ -140,12 +141,14 @@ func (c *Conn) sendPreparedQueryRaw(ps *PreparedStatement, pe ParamsEncoder) err
 	// (write format codes)
 	wbuf.WriteInt16(int16(argLen))
 	if err := pe.EncodeParamFormats(ps, wbuf); err != nil {
+		c.die(err)
 		return err
 	}
 
 	// (write parameters)
 	wbuf.WriteInt16(int16(argLen))
 	if err := pe.EncodeParams(ps, wbuf); err != nil {
+		c.die(err)
 		return err
 	}
 
@@ -163,7 +166,7 @@ func (c *Conn) sendPreparedQueryRaw(ps *PreparedStatement, pe ParamsEncoder) err
 	wbuf.startMsg('S')
 	wbuf.closeMsg()
 
-	_, err = c.conn.Write(wbuf.buf)
+	_, err := c.conn.Write(wbuf.buf)
 	if err != nil {
 		c.die(err)
 	}
