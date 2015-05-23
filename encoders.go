@@ -11,32 +11,32 @@ func (wb *WriteBuf) EncodeBool(v bool) {
 	if v {
 		cast = 1
 	}
-	b := []byte{0, 0, 0, 1, cast}
-	wb.buf = append(wb.buf, b)
+	b := []byte{0, 0, 0, 1, byte(cast)}
+	wb.buf = append(wb.buf, b...)
 }
 
 func (wb *WriteBuf) EncodeInt2(v int16) {
 	b := []byte{0, 0, 0, 2, byte(v >> 8), byte(v)}
-	wb.buf = append(wb.buf, b)
+	wb.buf = append(wb.buf, b...)
 }
 
 func (wb *WriteBuf) EncodeInt4(v int32) {
 	b := []byte{0, 0, 0, 4, byte(v >> 24), byte(v >> 16), byte(v >> 8), byte(v)}
-	wb.buf = append(wb.buf, b)
+	wb.buf = append(wb.buf, b...)
 }
 
 func (wb *WriteBuf) EncodeInt8(v int64) {
 	b := []byte{0, 0, 0, 8}
 	b = append(b, byte(v>>56), byte(v>>48), byte(v>>40), byte(v>>32))
 	b = append(b, byte(v>>24), byte(v>>16), byte(v>>8), byte(v))
-	wb.buf = append(wb.buf, b)
+	wb.buf = append(wb.buf, b...)
 }
 
 func (wb *WriteBuf) EncodeFloat4(v float32) {
 	b := []byte{0, 0, 0, 4}
 	cast := int32(math.Float32bits(v))
 	b = append(b, byte(cast>>24), byte(cast>>16), byte(cast>>8), byte(cast))
-	wb.buf = append(wb.buf, b)
+	wb.buf = append(wb.buf, b...)
 }
 
 func (wb *WriteBuf) EncodeFloat8(v float64) {
@@ -44,7 +44,7 @@ func (wb *WriteBuf) EncodeFloat8(v float64) {
 	cast := int32(math.Float64bits(v))
 	b = append(b, byte(cast>>56), byte(cast>>48), byte(cast>>40), byte(cast>>32))
 	b = append(b, byte(cast>>24), byte(cast>>16), byte(cast>>8), byte(cast))
-	wb.buf = append(wb.buf, b)
+	wb.buf = append(wb.buf, b...)
 }
 
 func (wb *WriteBuf) EncodeBytea(v []byte) {
@@ -54,7 +54,7 @@ func (wb *WriteBuf) EncodeBytea(v []byte) {
 	if len(v) != 0 {
 		copy(b[4:totalLen], v)
 	}
-	wb.buf = append(wb.buf, b)
+	wb.buf = append(wb.buf, b...)
 }
 
 func (wb *WriteBuf) EncodeText(v string) {
@@ -64,7 +64,7 @@ func (wb *WriteBuf) EncodeText(v string) {
 	if len(v) != 0 {
 		copy(b[4:totalLen], v)
 	}
-	wb.buf = append(wb.buf, b)
+	wb.buf = append(wb.buf, b...)
 }
 
 func (wb *WriteBuf) EncodeVarchar(v string) {
@@ -73,7 +73,7 @@ func (wb *WriteBuf) EncodeVarchar(v string) {
 
 func (wb *WriteBuf) EncodeDate(v time.Time) {
 	b := []byte{0, 0, 0, 10}
-	wb.buf = append(wb.buf, append(b, v.Format("2006-01-02"))...)
+	wb.buf = append(wb.buf, append(b, v.Format("2006-01-02")...)...)
 }
 
 func (wb *WriteBuf) EncodeTimestampTz(v time.Time) {
@@ -83,7 +83,7 @@ func (wb *WriteBuf) EncodeTimestampTz(v time.Time) {
 	b := []byte{0, 0, 0, 8}
 	b = append(b, byte(x>>56), byte(x>>48), byte(x>>40), byte(x>>32))
 	b = append(b, byte(x>>24), byte(x>>16), byte(x>>8), byte(x))
-	wb.buf = append(wb.buf, b)
+	wb.buf = append(wb.buf, b...)
 }
 
 func (wb *WriteBuf) EncodeTimestamp(v time.Time) {
@@ -92,12 +92,12 @@ func (wb *WriteBuf) EncodeTimestamp(v time.Time) {
 
 func encodeArrayHeaderBytes(oid Oid, length, sizePerItem int) []byte {
 	b := make([]byte, 24)
-	binary.BigEndian.PutUint32(b[:4], int32(20+length*sizePerItem))
-	binary.BigEndian.PutUint32(b[4:8], 1)               // number of dimensions
-	binary.BigEndian.PutUint32(b[8:12], 0)              // no nulls
-	binary.BigEndian.PutUint32(b[12:16], int32(oid))    // type of elements
-	binary.BigEndian.PutUint32(b[16:20], int32(length)) // number of elements
-	binary.BigEndian.PutUint32(b[20:24], 1)             // index of first element
+	binary.BigEndian.PutUint32(b[:4], uint32(20+length*sizePerItem))
+	binary.BigEndian.PutUint32(b[4:8], 1)                // number of dimensions
+	binary.BigEndian.PutUint32(b[8:12], 0)               // no nulls
+	binary.BigEndian.PutUint32(b[12:16], uint32(oid))    // type of elements
+	binary.BigEndian.PutUint32(b[16:20], uint32(length)) // number of elements
+	binary.BigEndian.PutUint32(b[20:24], 1)              // index of first element
 	return b
 }
 
@@ -109,7 +109,7 @@ func (wb *WriteBuf) EncodeBoolArray(vs []bool) {
 		if v {
 			cast = 1
 		}
-		b = append(b, 0, 0, 0, 1, cast)
+		b = append(b, 0, 0, 0, 1, byte(cast))
 	}
 	wb.buf = append(wb.buf, append(h, b...)...)
 }
@@ -172,43 +172,43 @@ func (wb *WriteBuf) EncodeTextArray(vs []string) {
 	}
 	size := 20 + len(vs)*4 + totalStringSize
 	b := make([]byte, 24)
-	binary.BigEndian.PutUint32(b[:4], size)
-	binary.BigEndian.PutUint32(b[4:8], 1)                // number of dimensions
-	binary.BigEndian.PutUint32(b[8:12], 0)               // no nulls
-	binary.BigEndian.PutUint32(b[12:16], int32(TextOid)) // type of elements
-	binary.BigEndian.PutUint32(b[16:20], int32(len(vs))) // number of elements
-	binary.BigEndian.PutUint32(b[20:24], 1)              // index of first element
+	binary.BigEndian.PutUint32(b[:4], uint32(size))
+	binary.BigEndian.PutUint32(b[4:8], 1)                 // number of dimensions
+	binary.BigEndian.PutUint32(b[8:12], 0)                // no nulls
+	binary.BigEndian.PutUint32(b[12:16], uint32(TextOid)) // type of elements
+	binary.BigEndian.PutUint32(b[16:20], uint32(len(vs))) // number of elements
+	binary.BigEndian.PutUint32(b[20:24], 1)               // index of first element
 
-	for _, v := range slice {
+	for _, v := range vs {
 		tmp := make([]byte, 4)
-		binary.BigEndian.PutUint32(tmp, len(v))
+		binary.BigEndian.PutUint32(tmp, uint32(len(v)))
 		b = append(b, append(tmp, v...)...)
 	}
 
-	wb.buf = append(wb.buf, b)
+	wb.buf = append(wb.buf, b...)
 }
 
-func (wb *WriteBuf) EncodeVarcharArray(v []string) {
+func (wb *WriteBuf) EncodeVarcharArray(vs []string) {
 	var totalStringSize int
 	for _, v := range vs {
 		totalStringSize += len(v)
 	}
 	size := 20 + len(vs)*4 + totalStringSize
 	b := make([]byte, 24)
-	binary.BigEndian.PutUint32(b[:4], size)
-	binary.BigEndian.PutUint32(b[4:8], 1)                   // number of dimensions
-	binary.BigEndian.PutUint32(b[8:12], 0)                  // no nulls
-	binary.BigEndian.PutUint32(b[12:16], int32(VarcharOid)) // type of elements
-	binary.BigEndian.PutUint32(b[16:20], int32(len(vs)))    // number of elements
-	binary.BigEndian.PutUint32(b[20:24], 1)                 // index of first element
+	binary.BigEndian.PutUint32(b[:4], uint32(size))
+	binary.BigEndian.PutUint32(b[4:8], 1)                    // number of dimensions
+	binary.BigEndian.PutUint32(b[8:12], 0)                   // no nulls
+	binary.BigEndian.PutUint32(b[12:16], uint32(VarcharOid)) // type of elements
+	binary.BigEndian.PutUint32(b[16:20], uint32(len(vs)))    // number of elements
+	binary.BigEndian.PutUint32(b[20:24], 1)                  // index of first element
 
-	for _, v := range slice {
+	for _, v := range vs {
 		tmp := make([]byte, 4)
-		binary.BigEndian.PutUint32(tmp, len(v))
+		binary.BigEndian.PutUint32(tmp, uint32(len(v)))
 		b = append(b, append(tmp, v...)...)
 	}
 
-	wb.buf = append(wb.buf, b)
+	wb.buf = append(wb.buf, b...)
 }
 
 func (wb *WriteBuf) EncodeTimestampArray(vs []time.Time) {
@@ -227,5 +227,5 @@ func (wb *WriteBuf) EncodeTimestampArray(vs []time.Time) {
 
 func (wb *WriteBuf) EncodeOid(v Oid) {
 	b := []byte{0, 0, 0, 4, byte(v >> 24), byte(v >> 16), byte(v >> 8), byte(v)}
-	wb.buf = append(wb.buf, b)
+	wb.buf = append(wb.buf, b...)
 }

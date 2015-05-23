@@ -1,5 +1,9 @@
 package pgx
 
+import (
+	"time"
+)
+
 // NextColumn returns the ValueReader for the next column in the current row, and
 // a bool to signal whether the operation succeeded.
 func (rows *Rows) NextColumn() (vr *ValueReader, ok bool) {
@@ -108,7 +112,7 @@ func (c *Conn) sendQueryRaw(sql string, pe ParamsEncoder) (err error) {
 }
 
 func (c *Conn) sendSimpleQueryRaw(sql string, pe ParamsEncoder) error {
-	if len(args) == 0 {
+	if pe == nil {
 		wbuf := newWriteBuf(c.wbuf[0:0], 'Q')
 		wbuf.WriteCString(sql)
 		wbuf.closeMsg()
