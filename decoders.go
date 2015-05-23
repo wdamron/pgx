@@ -45,7 +45,7 @@ func (vr *ValueReader) DecodeText() (string, error) {
 }
 
 func (vr *ValueReader) DecodeVarchar() (string, error) {
-	x := decodeText(vr)
+	v := decodeText(vr)
 	return v, vr.Err()
 }
 
