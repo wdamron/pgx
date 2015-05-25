@@ -4,112 +4,90 @@ import (
 	"time"
 )
 
-func (vr *ValueReader) DecodeBool() (bool, error) {
-	v := decodeBool(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeBool() bool {
+	return decodeBool(vr)
 }
 
-func (vr *ValueReader) DecodeInt2() (int16, error) {
-	v := decodeInt2(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeInt2() int16 {
+	return decodeInt2(vr)
 }
 
-func (vr *ValueReader) DecodeInt4() (int32, error) {
-	v := decodeInt4(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeInt4() int32 {
+	return decodeInt4(vr)
 }
 
-func (vr *ValueReader) DecodeInt8() (int64, error) {
-	v := decodeInt8(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeInt8() int64 {
+	return decodeInt8(vr)
 }
 
-func (vr *ValueReader) DecodeFloat4() (float32, error) {
-	v := decodeFloat4(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeFloat4() float32 {
+	return decodeFloat4(vr)
 }
 
-func (vr *ValueReader) DecodeFloat8() (float64, error) {
-	v := decodeFloat8(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeFloat8() float64 {
+	return decodeFloat8(vr)
 }
 
-func (vr *ValueReader) DecodeBytea() ([]byte, error) {
-	v := decodeBytea(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeBytea() []byte {
+	return decodeBytea(vr)
 }
 
-func (vr *ValueReader) DecodeText() (string, error) {
-	v := decodeText(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeText() string {
+	return decodeText(vr)
 }
 
-func (vr *ValueReader) DecodeVarchar() (string, error) {
-	v := decodeText(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeVarchar() string {
+	return decodeText(vr)
 }
 
-func (vr *ValueReader) DecodeDate() (time.Time, error) {
-	v := decodeDate(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeDate() time.Time {
+	return decodeDate(vr)
 }
 
-func (vr *ValueReader) DecodeTimestampTz() (time.Time, error) {
-	v := decodeTimestampTz(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeTimestampTz() time.Time {
+	return decodeTimestampTz(vr)
 }
 
-func (vr *ValueReader) DecodeTimestamp() (time.Time, error) {
-	v := decodeTimestamp(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeTimestamp() time.Time {
+	return decodeTimestamp(vr)
 }
 
-func (vr *ValueReader) DecodeBoolArray() ([]bool, error) {
-	v := decodeBoolArray(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeBoolArray() []bool {
+	return decodeBoolArray(vr)
 }
 
-func (vr *ValueReader) DecodeInt2Array() ([]int16, error) {
-	v := decodeInt2Array(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeInt2Array() []int16 {
+	return decodeInt2Array(vr)
 }
 
-func (vr *ValueReader) DecodeInt4Array() ([]int32, error) {
-	v := decodeInt4Array(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeInt4Array() []int32 {
+	return decodeInt4Array(vr)
 }
 
-func (vr *ValueReader) DecodeInt8Array() ([]int64, error) {
-	v := decodeInt8Array(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeInt8Array() []int64 {
+	return decodeInt8Array(vr)
 }
 
-func (vr *ValueReader) DecodeFloat4Array() ([]float32, error) {
-	v := decodeFloat4Array(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeFloat4Array() []float32 {
+	return decodeFloat4Array(vr)
 }
 
-func (vr *ValueReader) DecodeFloat8Array() ([]float64, error) {
-	v := decodeFloat8Array(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeFloat8Array() []float64 {
+	return decodeFloat8Array(vr)
 }
 
-func (vr *ValueReader) DecodeTextArray() ([]string, error) {
-	v := decodeTextArray(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeTextArray() []string {
+	return decodeTextArray(vr)
 }
 
-func (vr *ValueReader) DecodeVarcharArray() ([]string, error) {
-	v := decodeTextArray(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeVarcharArray() []string {
+	return decodeTextArray(vr)
 }
 
-func (vr *ValueReader) DecodeTimestampArray() ([]time.Time, error) {
-	v := decodeTimestampArray(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeTimestampArray() []time.Time {
+	return decodeTimestampArray(vr)
 }
 
-func (vr *ValueReader) DecodeOid() (Oid, error) {
-	v := decodeOid(vr)
-	return v, vr.Err()
+func (vr *ValueReader) DecodeOid() Oid {
+	return decodeOid(vr)
 }
